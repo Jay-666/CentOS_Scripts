@@ -3,6 +3,7 @@
 #下载源http://mirrors.sohu.com/nginx/
 NGINX_V=1.14.2
 PHP_V=7.4.5
+MYSQL_V=5.7.23
 INSTALL_DIR=/usr/local
 TMP_DIR=/tmp
 mPWD=$PWD
@@ -49,7 +50,7 @@ function install_php(){
   cd $TMP_DIR
   #安装epel源，和php相关支持包
   [ ! -e /etc/yum.repos.d/epel.repo ] && rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &&yum clean all &&yum makecache fast
-  yum install -y gcc gcc-c++ libxml2-devel openssl openssl-devel libcurl-devel libjpeg-devel libpng libpng-devel freetype freetype-devel libmcrypt-devel libmcrypt wget  oniguruma oniguruma-devel sqlite-devel bzip2 bzip2-devel
+  yum install -y gcc gcc-c++ libxml2-devel openssl openssl-devel libcurl-devel libjpeg-devel libpng libpng-devel freetype freetype-devel libmcrypt-devel libmcrypt wget  oniguruma oniguruma-devel sqlite-devel bzip2 bzip2-devel libxslt libxslt-devel
 # yum install -y gcc gcc-c++ libxml2-devel openssl openssl-devel libcurl-devel libjpeg-devel libpng libpng-devel freetype freetype-devel libmcrypt-devel libmcrypt bzip2 bzip2-devel libxslt libxslt-devel libzip libzip-devel 
  if [ ! -e php-${PHP_V}.tar.gz ] ;then wget   https://www.php.net/distributions/php-${PHP_V}.tar.gz ; fi
   cmd_status "下载php源码包"
@@ -140,9 +141,47 @@ EOF
 }
 
 function install_mysql(){
-  yum install gcc gcc-c++ ncurses-devel perl autoconf wget xmake -y
+  yum install gcc gcc-c++ ncurses-devel perl autoconf wget cmake -y
   cd $TMP_DIR
-  
+  [ ! -e ${TMP_DIR}/mysql-boost-${MYSQL_V}.tar.gz ]  && wget http://mirrors.sohu.com/mysql/MySQL-${MYSQL_V:0:3}/mysql-boost-${MYSQL_V}.tar.gz
+  tar zxf mysql-boost-${MYSQL_V}.tar.gz 
+  [ ! `id mysql>/dev/null` ] && useradd -s/sbin/nologin mysql
+  mkdir -p /data/mysql/data
+  chown -R mysql:mysql /data/mysql
+  cd $TMP_DIR/mysql-${MYSQL_V}
+  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_BOOST=boost
+  cmd_status "编译前平台准备"
+  make
+  cmd_ststus "编译"
+  make install
+  cmd_status "安装编译"
+  cat >${INSTALL_DIR}/mysql/etc/my.cnf<<EOF
+[mysqld]
+user=mysql                           
+port=3306                            
+basedir = /usr/local/mysql
+datadir=/data/mysql/data             
+socket=/tmp/mysql.sock        
+
+[mysqld_safe]
+log-error=/data/mysql/mysql-error.log       
+pid-file=/data/mysql/mysql.pid    
+
+[client]
+socket=/tmp/mysql.sock
+EOF
+  chown -R mysql:mysql ${INSTALL_DIR}mysql
+  ${INSTALL_DIR}/mysql/scripts/mysql_install_db --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql/data
+  cmd_status "mysql初始化"
+  cp ${INSTALL_DIR}/mysql/support-files/mysql.server /etc/init.d/mysql
+  sed -i "s|basedir=.*|basedir=${INSTALL_DIR}\/mysql|" /etc/init.d/mysql
+  sed -i "s|datadir=.*|datadir=/data/mysql/data|" /etc/init.d/mysql 
+  sed -i "s|conf=.*|conf=${INSTALL_DIR}/mysql/etc/my.cnf  " /etc/init.d/mysql
+  /etc/init.d/mysql start
+  cmd_status "mysql服务器启动"
+  echo "export PATH=$PATH:${INSTALL_DIR}/mysql/bin" >>/etc/profile
+  source /etc/profile
+
 
 }
 
@@ -152,7 +191,7 @@ function main(){
   echo -e "1. install nginx"
   echo -e "2. install php"
   echo -e "3. install mysql"
-  echo -e "4. install lnmp"
+  echo -e "4. install nginx+php"
   read -p "请选择你需要的操作,或按q退出：" index
    
   case $index in
@@ -161,7 +200,6 @@ function main(){
     3) install_mysql;;
     4) install_nginx
        install_php;;
-  #     install_mysql;;
     q) exit
   esac
 }
