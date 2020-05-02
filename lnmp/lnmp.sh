@@ -34,9 +34,9 @@ function install_nginx(){
   make install
   cmd_status "nginx - 编译安装" 
   #添加对php的支持
-  sed -i '65,71s/^[[:space:]]\+#//g' $INSTALL/nginx/conf/nginx.conf
-  sed -i '45s/index.html/index.php index.html/g' $INSTALL/nginx/conf/nginx.conf
-  echo "fastcgi_param  SCRIPT_FILENAME    \$document_root\$fastcgi_script_name;" >> $INSTALL/nginx/conf/fastcgi_params
+  sed -i '65,71s/^[[:space:]]\+#//g' $INSTALL_DIR/nginx/conf/nginx.conf
+  sed -i '45s/index.html/index.php index.html/g' $INSTALL_DIR/nginx/conf/nginx.conf
+  echo "fastcgi_param  SCRIPT_FILENAME    \$document_root\$fastcgi_script_name;" >> $INSTALL_DIR/nginx/conf/fastcgi_params
   #测试页面
   echo "ok" >$INSTALL_DIR/nginx/html/status.html
   echo '<?php echo "ok"?>'  >$INSTALL_DIR/nginx/html/status.php
