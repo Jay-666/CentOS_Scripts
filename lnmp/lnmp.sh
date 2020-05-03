@@ -199,7 +199,7 @@ EOF
   sed -i "s|conf=.*|conf=${INSTALL_DIR}\/mysql\/etc\/my.cnf|" /etc/init.d/mysql
   /etc/init.d/mysql start
   cmd_status "mysql服务器启动"
-  echo "export PATH=$PATH:${INSTALL_DIR}/mysql/bin" >>/etc/profile
+  echo "export PATH=${PATH}:${INSTALL_DIR}/mysql/bin" >>/etc/profile
   source /etc/profile
 
 
@@ -212,6 +212,7 @@ function main(){
   echo -e "2. install php"
   echo -e "3. install mysql"
   echo -e "4. install nginx+php"
+  echo -e "5. install nginx+php+mysql"
   read -p "请选择你需要的操作,或按q退出：" index
    
   case $index in
@@ -220,6 +221,9 @@ function main(){
     3) install_mysql;;
     4) install_nginx
        install_php;;
+    5) install_nginx
+       install_php
+       install_mysql;;
     q) exit
   esac
 }
