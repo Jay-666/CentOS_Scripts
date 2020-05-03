@@ -140,6 +140,20 @@ EOF
   
 }
 
+#为编译mysql添加临时swap分区
+function swap_tmp(){
+  case $1 in
+   add)
+     dd if=/dev/zero of=/swapfile bs=1M count=2048
+     mkswap /swapfile
+     swapon /swapfile;;
+   rm)
+     swapoff /swapfile
+     rm /swapfile
+   esac
+}
+
+
 function install_mysql(){
   yum install gcc gcc-c++ ncurses-devel perl autoconf wget cmake -y
   cd $TMP_DIR
@@ -149,33 +163,39 @@ function install_mysql(){
   mkdir -p /data/mysql/data
   chown -R mysql:mysql /data/mysql
   cd $TMP_DIR/mysql-${MYSQL_V}
+  swap_tmp "add"
   cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_BOOST=boost
   cmd_status "编译前平台准备"
   make
   cmd_ststus "编译"
   make install
   cmd_status "安装编译"
+  swap_tmp "rm"
   cat >${INSTALL_DIR}/mysql/etc/my.cnf<<EOF
 [mysqld]
-user=mysql                           
-port=3306                            
+user=mysql
+port=3306
 basedir = /usr/local/mysql
-datadir=/data/mysql/data             
-socket=/tmp/mysql.sock        
+datadir=/data/mysql/data
+socket=/tmp/mysql.sock
+log-error=/data/mysql/mysql-error.log
+pid-file=/data/mysql/mysql.pid
+tmpdir=/tmp
 
 [mysqld_safe]
-log-error=/data/mysql/mysql-error.log       
-pid-file=/data/mysql/mysql.pid    
+log-error=/data/mysql/mysql-error.log
+pid-file=/data/mysql/mysql.pid
 
 [client]
 socket=/tmp/mysql.sock
+
 EOF
   chown -R mysql:mysql ${INSTALL_DIR}mysql
-  ${INSTALL_DIR}/mysql/scripts/mysql_install_db --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql/data
+  ${INSTALL_DIR}/mysql/bin/mysqld --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql/data --pid-file=/data/mysql/mysql.pid --tmpdir=/tmp
   cmd_status "mysql初始化"
   cp ${INSTALL_DIR}/mysql/support-files/mysql.server /etc/init.d/mysql
-  sed -i "s|basedir=.*|basedir=${INSTALL_DIR}\/mysql|" /etc/init.d/mysql
-  sed -i "s|datadir=.*|datadir=/data/mysql/data|" /etc/init.d/mysql 
+  sed -i "s|^basedir=.*|basedir=${INSTALL_DIR}\/mysql|" /etc/init.d/mysql
+  sed -i "s|^datadir=.*|datadir=/data/mysql/data|" /etc/init.d/mysql 
   sed -i "s|conf=.*|conf=${INSTALL_DIR}/mysql/etc/my.cnf  " /etc/init.d/mysql
   /etc/init.d/mysql start
   cmd_status "mysql服务器启动"
