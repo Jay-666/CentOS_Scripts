@@ -195,8 +195,8 @@ EOF
   cmd_status "mysql初始化"
   cp ${INSTALL_DIR}/mysql/support-files/mysql.server /etc/init.d/mysql
   sed -i "s|^basedir=.*|basedir=${INSTALL_DIR}\/mysql|" /etc/init.d/mysql
-  sed -i "s|^datadir=.*|datadir=/data/mysql/data|" /etc/init.d/mysql 
-  sed -i "s|conf=.*|conf=${INSTALL_DIR}/mysql/etc/my.cnf  " /etc/init.d/mysql
+  sed -i "s|^datadir=.*|datadir=\/data\/mysql\/data|" /etc/init.d/mysql 
+  sed -i "s|conf=.*|conf=${INSTALL_DIR}\/mysql\/etc\/my.cnf|" /etc/init.d/mysql
   /etc/init.d/mysql start
   cmd_status "mysql服务器启动"
   echo "export PATH=$PATH:${INSTALL_DIR}/mysql/bin" >>/etc/profile
