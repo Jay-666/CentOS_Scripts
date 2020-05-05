@@ -1,19 +1,21 @@
 #!/bin/bash
 #需要 git wget unzip maven /data/backup
+#参数1：tomcat文件夹名
 DATE=$(date +%F_%T)
 
 TOMCAT_NAME=$1
 TOMCAT_DIR=/usr/local/$TOMCAT_NAME
-ROOT=$TOMCAT_DOR/webapps/ROOT
+ROOT=${TOMCAT_DIR}/webapps/ROOT
+GIT_LINK=https://github.com/lizhenliang/tomcat-java-demo.git
 
 BACKUP_DIR=/data/backup
-WOEK_DIR=/tmp
+WORK_DIR=/tmp
 PROJECT_NAME=tomcat-java-demo
 
 #拉取代码
 cd $WORK_DIR
 if [ ! -d $PROJECT_NAME ];then
-  git clone https://github.com/lizhenliang/tomcat-java-demo.git
+  git clone $GIT_LINK
   cd $PROJECT_NAME
 else
   cd $PROJECT_NAME
