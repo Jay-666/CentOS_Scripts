@@ -20,36 +20,36 @@ tip：有些脚本实际需要搭配时间任务使用的
 
 
 
-.
-├── DOS
-│   └── drop_ip.sh
-├── init
-│   └── init.sh
-├── lnmp
-│   └── lnmp.sh
-├── monitor
-│   ├── availability.sh
-│   ├── disk_remote.sh
-│   ├── host.info
-│   └── process_higt.sh
-├── mysql
-│   ├── backup_databases.sh
-│   ├── backup_tables.sh
-│   └── isSyn.sh
-├── network
-│   └── set_static_ip.sh
-├── nginx
-│   ├── acclog.sh
-│   ├── logcut.sh
-│   └── release.sh
-├── README.md
-├── safety
-│   └── mon_dir.sh
-├── synchronize
-│   └── simple_syn.sh
-├── tomcat
-│   └── release.sh
-├── useradds
-│   └── useradds.sh
-└── web
-    └── web.sh
+.  
+├── DOS  
+│   └── drop_ip.sh  
+├── init  
+│   └── init.sh  
+├── lnmp  
+│   └── lnmp.sh  
+├── monitor  
+│   ├── availability.sh  
+│   ├── disk_remote.sh  
+│   ├── host.info  
+│   └── process_higt.sh  
+├── mysql  
+│   ├── backup_databases.sh  
+│   ├── backup_tables.sh  
+│   └── isSyn.sh  
+├── network  
+│   └── set_static_ip.sh  
+├── nginx  
+│   ├── acclog.sh  
+│   ├── logcut.sh  
+│   └── release.sh  
+├── README.md  
+├── safety  
+│   └── mon_dir.sh  
+├── synchronize  
+│   └── simple_syn.sh  
+├── tomcat 
+│   └── release.sh  
+├── useradds  
+│   └── useradds.sh  
+└── web  
+    └── web.sh  
