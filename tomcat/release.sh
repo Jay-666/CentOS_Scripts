@@ -31,7 +31,7 @@ fi
 
 #部署
 TOMCAT_PID=$(ps -ef|grep "$TOMCAT_NAME"|egrep -v "grep|$$" |awk 'NR==1{print $2}' )
-[ -n $TOMCAT_PID ] && kill -9 $TOMCAT_PID
+[ $TOMCAT_PID!="" ] && kill -9 $TOMCAT_PID
 [ -d $ROOT ]&& mv $ROOT $BACKUP_DIR/${TOMCAT_NAME}_ROOT$DATE
 unzip $WORK_DIR/$PROJECT_NAME/target/*.war -d $ROOT
 $TOMCAT_DIR/bin/startup.sh
