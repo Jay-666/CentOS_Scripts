@@ -60,8 +60,8 @@ echo "0" > /proc/sys/vm/swappiness
 #配置阿里yum源
 budir=/etc/yum.repos.d/backup`date "+%Y%m%d"`
 mkdir $budir
-mv /etc/yum.repos.d/Cen*repo $budir
 yum install -y wget
+mv /etc/yum.repos.d/Cen*repo $budir
 wget -P /etc/yum.repos.d/  http://mirrors.aliyun.com/repo/Centos-7.repo
 yum clean all
 yum makecache
