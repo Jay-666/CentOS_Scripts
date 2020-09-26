@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#下载免交互输入密码工具
+if [ $(rpm -qa |grep sshpass|wc) != 1 ];
+then
+yum install -y sshpass
+fi
+
+#生成密钥对
+if [ ! -e /root/.ssh/id_rsa.pub ];
+then
+ssh-keygen -t ras
+fi
+
+
+#分发公钥
+for ip in {11,12,13}
+do
+        echo "=========host 192.168.0.$ip pub-key start fenfa============="
+        sshpass -p mkl123456 ssh-copy-id -i /root/.ssh/id_rsa.pub root@192.168.0.11 -p 22 “-o StrictHostKeyChecking=no &> /dev/null”
+        if [ $? == 0 ]; then  echo "success!" ; fi
+       echo "=========host 192.168.0.$ip pub-key end fenfa============="
+done
