@@ -7,7 +7,7 @@ if  echo 'rpm -qa |egrep ^ntp*.|wc -l' -eq 0;then
         systemctl start ntpd
 fi
 if ! crontab -l|grep ntpdate &>/dev/null ;then
-        (echo "* 1 * * * ntpdate ntp1.aliyun.com >/dev/null 2>&1";crontab -l) |crontab
+        (echo "59 * * * * ntpdate ntp1.aliyun.com >/dev/null 2>&1";crontab -l) |crontab
 fi
 
 
@@ -26,15 +26,15 @@ iptables-save > /etc/sysconfig/iptables
 
 #history显示时间和用户名
 #对当前窗口暂时有效
-sed -i '$a export HISTTIMEFORMAT="%F %T `whoami` "' /etc/bashrc
-source /etc/bashrc
+#sed -i '$a export HISTTIMEFORMAT="%F %T `whoami` "' /etc/bashrc
+#source /etc/bashrc
 
 #禁止root远程登录
 # !请注意一定要有能sudo的用户再禁止root用户远程登录
 #sed -i 's/#PermitRootLogin yes/PermitRootLogin on/' /etc/ssh/sshd_config
 
 #禁止定时任务发送邮件
-sed -i 's/^MAILTO=root/MAILTO=""/' /etc/crontab
+#sed -i 's/^MAILTO=root/MAILTO=""/' /etc/crontab
 
 #设置最大文件打开数
 if ! grep "*       soft    nofile  65535" /etc/security/limits.conf &>/dev/null; then
@@ -58,9 +58,9 @@ EOF
 echo "0" > /proc/sys/vm/swappiness
 
 #配置阿里yum源
+yum install -y wget
 budir=/etc/yum.repos.d/backup`date "+%Y%m%d"`
 mkdir $budir
-yum install -y wget
 mv /etc/yum.repos.d/Cen*repo $budir
 wget -P /etc/yum.repos.d/  http://mirrors.aliyun.com/repo/Centos-7.repo
 yum clean all
@@ -68,6 +68,5 @@ yum makecache
 
 
 #安装系统性能分析工具以及其他
-yum install gcc make autoconf vim sysstat net-tool iostat iftop iotp lrzsz lsof wget curl -y
-
-
+#yum install gcc make autoconf vim sysstat net-tool iostat iftop iotp lrzsz lsof wget curl -y
+yum install -y vim net-tool wget curl 
