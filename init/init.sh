@@ -2,13 +2,14 @@
 #设置时区
 timedatectl set-timezone Asia/Shanghai
 #同步时间
+#推荐使用ntpd，因为ntpd是渐进式的矫正时间，ntpdate是断崖式的矫正时间
 if  echo 'rpm -qa |egrep ^ntp*.|wc -l' -eq 0;then
         yum install -y ntp
         systemctl start ntpd
 fi
-if ! crontab -l|grep ntpdate &>/dev/null ;then
-        (echo "59 * * * * ntpdate ntp1.aliyun.com >/dev/null 2>&1";crontab -l) |crontab
-fi
+#if ! crontab -l|grep ntpdate &>/dev/null ;then
+#        (echo "59 * * * * ntpdate ntp1.aliyun.com >/dev/null 2>&1";crontab -l) |crontab
+#fi
 
 
 #禁用selinux
