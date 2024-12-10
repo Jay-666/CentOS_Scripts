@@ -70,4 +70,8 @@ yum makecache
 
 #安装系统性能分析工具以及其他
 #yum install gcc make autoconf vim sysstat net-tool iostat iftop iotp lrzsz lsof wget curl -y
+<<<<<<< HEAD
 yum install -y vim net-tool wget curl 
+=======
+yum install -y vim net-tool wget curl 
+>>>>>>> 5d6cb9b92d7a8a693537a9ac079b0656ddb9b944

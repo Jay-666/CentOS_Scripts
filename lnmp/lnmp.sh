@@ -51,13 +51,11 @@ function install_php(){
   #安装epel源，和php相关支持包
   [ ! -e /etc/yum.repos.d/epel.repo ] && rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &&yum clean all &&yum makecache fast
   yum install -y gcc gcc-c++ libxml2-devel openssl openssl-devel libcurl-devel libjpeg-devel libpng libpng-devel freetype freetype-devel libmcrypt-devel libmcrypt wget  oniguruma oniguruma-devel sqlite-devel bzip2 bzip2-devel libxslt libxslt-devel
-# yum install -y gcc gcc-c++ libxml2-devel openssl openssl-devel libcurl-devel libjpeg-devel libpng libpng-devel freetype freetype-devel libmcrypt-devel libmcrypt bzip2 bzip2-devel libxslt libxslt-devel libzip libzip-devel 
  if [ ! -e php-${PHP_V}.tar.gz ] ;then wget   https://www.php.net/distributions/php-${PHP_V}.tar.gz ; fi
   cmd_status "下载php源码包"
   if [ ! -d ${INSTALL_DIR}/php ];then
     [ ! -e  php-${PHP_V} ] && tar zxf php-${PHP_V}.tar.gz
     cd php-${PHP_V}
-#    ./configure --prefix=${INSTALL_DIR}/php --enable-sockets --enable-fpm --enable-cli --enable-mbstring --enable-pcntl --enable-soap --enable-opcache --disable-fileinfo --disable-rpath --with-mysqli --with-pdo-mysql --with-iconv-dir --with-openssl --with-fpm-user=nginx--with-fpm-group=nginx--with-curl --with-mhash --with-gd --with-jpeg-dir --with-png-dir --with-freetype-dir --enable-zip --with-zlib --enable-simplexml --with-libxml-dir
    ./configure \
   --prefix=${INSTALL_DIR}/php \
   --with-config-file-path=${INSTALL_DIR}/php/etc  \
@@ -153,6 +151,7 @@ function swap_tmp(){
    esac
 }
 
+#编译安装mysql耗时很长
 
 function install_mysql(){
   yum install gcc gcc-c++ ncurses-devel perl autoconf wget cmake -y
