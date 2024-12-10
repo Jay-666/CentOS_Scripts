@@ -1,4 +1,4 @@
-# Centos7Screenplay
+# Centos7_scrips
 Linux系统运维shell脚本
 
 | 目录 | 描述        |
@@ -7,7 +7,7 @@ Linux系统运维shell脚本
 |init|对Centos7系统做一些出事的优化|
 |lnmp|一键部署lnmp|
 |monitor|查看系统资源（CUP、内存、磁盘）使用情况|
-|mysql|mysql分表备份\|分库备份\|检测主从同步是否连接正常|
+|mysql|mysql分表备份\|分库备份\|检测主从同步是否正常\|全量增量备份\|异地备份|
 |network|给虚拟机配置静态IP|
 |nginx|一键发布PHP项目\|日志切割与分析|
 |safety|检测入侵|
@@ -20,7 +20,7 @@ tip：有些脚本实际需要搭配时间任务使用的
 
 
 
-.  
+。  
 ├── DOS  
 │   └── drop_ip.sh  
 ├── init  
