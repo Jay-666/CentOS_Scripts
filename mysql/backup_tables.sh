@@ -1,4 +1,9 @@
 #!/bin/bash
+##@Author: jay-666
+##@Date:   2020-11-25 10:39:16
+##@Last Modified by:   jay-666
+##@Last Modified time: 2020-11-25 10:39:16
+##Description: 备份mysql数据库,针对表进行备份
 DATE=$(date +%F_%H-%M-%S)
 HOST=localhost
 USER=root

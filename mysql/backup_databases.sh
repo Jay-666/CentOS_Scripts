@@ -1,4 +1,9 @@
 #!/bin/bash
+##@Author: jay-666
+##@Date: 2022-09-01 16:41:22
+##@Last Modified by:   jay-666
+##@Last Modified time: 2023-03-23 10:20:00
+##@@Description:使用mysqldump备份数据库，逻辑过于简单，弃用
 DATE=$(date +%F_%H-%M-%S)
 HOST=localhost
 USER=root

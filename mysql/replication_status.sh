@@ -1,6 +1,8 @@
 #!/bin/bash
-#检测主从同步工作是否正常
-#在从服务器执行，把脚本写入时间任务，并发邮件警报
+##Author: jay-666
+##Date: 2024-12-10
+##Description:检测主从同步工作是否正常
+##Description:在从服务器执行，把脚本写入时间任务，并发邮件警报
 HOST=localhost
 USER=root
 PASSWD=123
